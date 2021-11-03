@@ -1,0 +1,26 @@
+version: '3.5'
+
+services:
+  app:
+    env_file:
+      - .env
+    build:
+      dockerfile: ./docker/java/Dockerfile
+      context: .
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: ${postgres_username}
+      POSTGRES_PASSWORD: ${postgres_password}
+      POSTGRES_DB: ${database_name}
+    volumes:
+      - ./docker/psql/data:/var/lib/postgresql/data
+    ports:
+      - "54321:5432"
